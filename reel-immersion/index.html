@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="fr" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,800;0,900;1,500&family=JetBrains+Mono:wght@500&display=block"
+      rel="stylesheet"
+    />
+    <script src="assets/gsap.min.js"></script>
+    <style>
+      :root {
+        --ink: #f5f2ea;
+        --gold: #ebd08c;
+        --black: #070707;
+        --font: "Inter", sans-serif;
+        --mono: "JetBrains Mono", monospace;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--black); }
+      #root { position: relative; width: 100%; height: 100%; font-family: var(--font); color: var(--ink); overflow: hidden; }
+
+      .scene { position: absolute; inset: 0; overflow: hidden; }
+      .bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+      .shade { position: absolute; inset: 0; }
+      .content {
+        position: absolute; left: 0; right: 0; padding: 0 70px;
+        display: flex; flex-direction: column; align-items: center; text-align: center;
+      }
+      .shadow { text-shadow: 0 4px 30px rgba(0, 0, 0, 0.55); }
+      .gold { color: var(--gold); }
+      .w { display: inline-block; }
+      .line { display: block; }
+      .title { font-weight: 800; letter-spacing: -0.035em; line-height: 0.98; }
+      .ital { font-style: italic; font-weight: 500; color: var(--gold); letter-spacing: 0.01em; }
+      .body { font-weight: 500; line-height: 1.38; }
+      .mono { font-family: var(--mono); font-weight: 500; font-size: 28px; letter-spacing: 0.32em; }
+
+      /* Scène 1 : accroche */
+      #s1 .shade { background: linear-gradient(180deg, rgba(0,0,0,.15) 0%, rgba(0,0,0,.35) 40%, rgba(0,0,0,.7) 100%); }
+      #s1 .content { top: 780px; }
+      #s1 .title { font-size: 150px; font-weight: 900; }
+      #s1 .ital { font-size: 60px; margin-top: 60px; }
+      #s1 .mono { margin-top: 70px; color: var(--gold); }
+
+      /* Scène 2 : IMMERSION */
+      #s2 .shade { background: linear-gradient(180deg, rgba(7,7,7,1) 0%, rgba(7,7,7,.92) 14%, rgba(7,7,7,.35) 45%, rgba(0,0,0,.1) 60%, rgba(0,0,0,.45) 100%); }
+      #s2 .content { top: 290px; }
+      #s2 .pre { font-size: 46px; font-weight: 500; }
+      #s2 .big { white-space: nowrap; font-size: 150px; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: var(--gold); margin-top: 6px; }
+      #s2 .body { font-size: 44px; margin-top: 50px; }
+      #s2 .ital { position: absolute; top: 1480px; left: 0; right: 0; text-align: center; font-size: 62px; line-height: 1.2; }
+
+      /* Scène 3 : le concept */
+      #s3 .shade { background: linear-gradient(180deg, rgba(0,0,0,.05) 0%, rgba(0,0,0,.15) 45%, rgba(0,0,0,.82) 68%, rgba(5,5,5,.97) 100%); }
+      #s3 .content { top: 1060px; }
+      #s3 .title { font-size: 104px; color: var(--gold); }
+      #s3 .body { font-size: 47px; margin-top: 40px; }
+      #s3 .hl { position: relative; display: inline-block; }
+      #s3 .ul { position: absolute; left: 0; right: 0; bottom: -10px; height: 5px; background: var(--gold); transform-origin: left center; }
+      #s3 .ital { font-size: 64px; margin-top: 44px; }
+
+      /* Scène 4 : preuves */
+      #s4 .shade { background: rgba(8, 10, 14, 0.62); }
+      #s4 .content { top: 350px; }
+      #s4 .title { font-size: 96px; }
+      .client { margin-top: 46px; }
+      .client:first-of-type { margin-top: 70px; }
+      .cname { font-size: 78px; font-weight: 800; letter-spacing: -0.035em; line-height: 1; }
+      .cdesc { font-size: 36px; font-weight: 400; margin-top: 14px; color: rgba(245, 242, 234, 0.85); line-height: 1.35; }
+      #s4 .quote { font-size: 54px; line-height: 1.3; margin-top: 90px; }
+      #s4 .mono { margin-top: 34px; font-size: 28px; color: rgba(245, 242, 234, 0.75); }
+
+      /* Scène 5 : CTA */
+      #s5 .shade { background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.1) 40%, rgba(0,0,0,.6) 60%, rgba(5,5,5,.96) 90%); }
+      #s5 .content { top: 960px; }
+      #s5 .title { font-size: 104px; }
+      .btn {
+        margin-top: 60px; padding: 34px 84px; border-radius: 80px; background: var(--gold);
+        color: #141414; font-size: 50px; font-weight: 800; letter-spacing: -0.02em;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+      }
+      #s5 .ital { font-size: 62px; line-height: 1.25; margin-top: 50px; }
+      #s5 .mono { letter-spacing: 0.18em; white-space: nowrap; margin-top: 50px; color: rgba(245, 242, 234, 0.8); }
+
+      /* Habillage global */
+      #flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+      #grain {
+        position: absolute; inset: 0; opacity: 0.07; pointer-events: none; mix-blend-mode: overlay;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+      }
+      #vignette { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(120% 90% at 50% 45%, rgba(0,0,0,0) 55%, rgba(0,0,0,.45) 100%); }
+      #progress { position: absolute; left: 0; bottom: 0; width: 100%; height: 8px; background: var(--gold); transform-origin: left center; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="27" data-width="1080" data-height="1920">
+
+      <!-- 1. Accroche -->
+      <section id="s1" class="scene clip" data-start="0" data-duration="4.6" data-track-index="0">
+        <img class="bg" data-layout-allow-overflow src="assets/hook.jpg" alt="" />
+        <div class="shade"></div>
+        <div class="content shadow">
+          <div class="title"><span class="line w">TON</span><span class="line w">PROJET</span><span class="line w gold">A UNE</span><span class="line w gold">HISTOIRE</span></div>
+          <div class="ital">et si on la racontait ?</div>
+          <div class="mono">ZSD · FAIRE BRILLER L'AUTRE</div>
+        </div>
+      </section>
+
+      <!-- 2. Lancement -->
+      <section id="s2" class="scene clip" data-start="4.6" data-duration="5.8" data-track-index="0">
+        <img class="bg" data-layout-allow-overflow src="assets/immersion.jpg" alt="" />
+        <div class="shade"></div>
+        <div class="content shadow">
+          <div class="pre">Alors aujourd'hui, je lance</div>
+          <div class="big"><span class="w">I</span><span class="w">M</span><span class="w">M</span><span class="w">E</span><span class="w">R</span><span class="w">S</span><span class="w">I</span><span class="w">O</span><span class="w">N</span></div>
+          <div class="body"><span class="line">Pour les associations et porteurs de</span><span class="line">projet dont l'histoire est née du terrain.</span></div>
+        </div>
+        <div class="ital shadow"><span class="line">1 place par mois, pour</span><span class="line">prendre le temps</span></div>
+      </section>
+
+      <!-- 3. Le concept -->
+      <section id="s3" class="scene clip" data-start="10.4" data-duration="5.8" data-track-index="0">
+        <img class="bg" data-layout-allow-overflow src="assets/concept.jpg" alt="" />
+        <div class="shade"></div>
+        <div class="content shadow">
+          <div class="title">LE CONCEPT ?</div>
+          <div class="body">
+            <span class="line">Je viens passer une journée avec</span>
+            <span class="line">toi. Je t'écoute, je te regarde faire, je</span>
+            <span class="line">filme ce qui est vrai. Puis j'en fais un</span>
+            <span class="line">film qui raconte <span class="hl">ton histoire<span class="ul"></span></span>.</span>
+          </div>
+          <div class="ital">pas de mise en scène, promis</div>
+        </div>
+      </section>
+
+      <!-- 4. Preuves -->
+      <section id="s4" class="scene clip" data-start="16.2" data-duration="5.8" data-track-index="0">
+        <img class="bg" data-layout-allow-overflow src="assets/confiance.jpg" alt="" />
+        <div class="shade"></div>
+        <div class="content shadow">
+          <div class="title"><span class="line">ILS M'ONT</span><span class="line gold">FAIT CONFIANCE</span></div>
+          <div class="client"><div class="cname">HUMAN PEAK</div><div class="cdesc">Documentaire de plus d'1h · 342 km de Torgny à Ostende</div></div>
+          <div class="client"><div class="cname">IIM TALIBÉ</div><div class="cdesc">Vidéo de lancement · Casamance, Sénégal</div></div>
+          <div class="client"><div class="cname">ASBL ODS</div><div class="cdesc">Maraudes à Bruxelles · action d'urgence au Népal</div></div>
+          <div class="ital quote">« Il a été capable de déceler ma personnalité à travers quelques échanges audio. »</div>
+          <div class="mono">LA FONDATRICE D'IIM TALIBÉ</div>
+        </div>
+      </section>
+
+      <!-- 5. Appel à l'action -->
+      <section id="s5" class="scene clip" data-start="22" data-duration="5" data-track-index="0">
+        <img class="bg" data-layout-allow-overflow src="assets/cta.jpg" alt="" />
+        <div class="shade"></div>
+        <div class="content shadow">
+          <div class="title"><span class="line">SI ÇA TE PARLE,</span><span class="line gold">ÉCRIS-MOI</span></div>
+          <div class="btn">Je candidate ici ↓</div>
+          <div class="ital"><span class="line">je lis chaque candidature</span><span class="line">moi-même</span></div>
+          <div class="mono">@ZAKSOCIALDIGITAL · DU SENS À L'ACTION</div>
+        </div>
+      </section>
+
+      <div id="vignette" class="clip" data-start="0" data-duration="27" data-track-index="1"></div>
+      <div id="grain" class="clip" data-start="0" data-duration="27" data-track-index="2"></div>
+      <div id="flash" class="clip" data-start="0" data-duration="27" data-track-index="3"></div>
+      <div id="progress" class="clip" data-start="0" data-duration="27" data-track-index="4"></div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      // Ken Burns lent sur chaque photo
+      [["#s1", 0, 4.6], ["#s2", 4.6, 5.8], ["#s3", 10.4, 5.8], ["#s4", 16.2, 5.8], ["#s5", 22, 5]].forEach(([s, t, d], i) => {
+        tl.fromTo(`${s} .bg`, { scale: 1.14, yPercent: i % 2 ? -1.5 : 1.5 }, { scale: 1.02, yPercent: 0, duration: d, ease: "none" }, t);
+      });
+
+      // Transition entre scènes : flash bref + flou à l'entrée
+      [4.6, 10.4, 16.2, 22].forEach((t) => {
+        tl.fromTo("#flash", { opacity: 0.55 }, { opacity: 0, duration: 0.35, ease: "power2.out", immediateRender: false }, t);
+      });
+      ["#s2", "#s3", "#s4", "#s5"].forEach((s, i) => {
+        const t = [4.6, 10.4, 16.2, 22][i];
+        tl.fromTo(`${s} .bg`, { filter: "blur(18px) brightness(1.4)" }, { filter: "blur(0px) brightness(1)", duration: 0.55, ease: "power3.out" }, t);
+      });
+
+      // 1. Accroche : les mots claquent un par un (première image déjà lisible)
+      tl.from("#s1 .title .w:first-child", { scale: 1.2, duration: 0.4, ease: "expo.out" }, 0)
+        .from("#s1 .title .w:not(:first-child)", { scale: 1.35, opacity: 0, duration: 0.32, stagger: 0.38, ease: "expo.out" }, 0.5)
+        .from("#s1 .ital", { y: 40, opacity: 0, duration: 0.5, ease: "power3.out" }, 1.9)
+        .from("#s1 .mono", { opacity: 0, y: 16, duration: 0.5, ease: "power2.out" }, 2.4)
+        .to("#s1 .content", { y: -60, opacity: 0, duration: 0.3, ease: "power2.in" }, 4.3);
+
+      // 2. Lancement
+      tl.from("#s2 .pre", { y: 30, opacity: 0, duration: 0.45, ease: "power3.out" }, 4.75)
+        .from("#s2 .big .w", { y: 120, opacity: 0, duration: 0.5, stagger: 0.05, ease: "back.out(1.8)" }, 5.15)
+        .from("#s2 .body .line", { y: 30, opacity: 0, duration: 0.45, stagger: 0.15, ease: "power3.out" }, 6.0)
+        .from("#s2 .ital .line", { y: 40, opacity: 0, duration: 0.5, stagger: 0.18, ease: "power3.out" }, 7.0)
+        .to("#s2 .content, #s2 .ital", { opacity: 0, duration: 0.3, ease: "power2.in" }, 10.1);
+
+      // 3. Concept
+      tl.from("#s3 .title", { scale: 1.3, opacity: 0, duration: 0.45, ease: "expo.out" }, 10.6)
+        .from("#s3 .body .line", { y: 34, opacity: 0, duration: 0.45, stagger: 0.32, ease: "power3.out" }, 11.15)
+        .from("#s3 .ul", { scaleX: 0, duration: 0.5, ease: "power3.inOut" }, 12.6)
+        .from("#s3 .ital", { y: 30, opacity: 0, duration: 0.5, ease: "power3.out" }, 13.4)
+        .to("#s3 .content", { opacity: 0, duration: 0.3, ease: "power2.in" }, 15.9);
+
+      // 4. Preuves
+      tl.from("#s4 .title .line", { y: 50, opacity: 0, duration: 0.45, stagger: 0.2, ease: "back.out(1.6)" }, 16.4)
+        .from("#s4 .client", { y: 40, opacity: 0, duration: 0.45, stagger: 0.35, ease: "power3.out" }, 17.0)
+        .from("#s4 .quote", { y: 30, opacity: 0, duration: 0.5, ease: "power3.out" }, 18.2)
+        .from("#s4 .mono", { opacity: 0, duration: 0.5, ease: "power2.out" }, 18.7)
+        .to("#s4 .content", { opacity: 0, duration: 0.3, ease: "power2.in" }, 21.7);
+
+      // 5. Appel à l'action
+      tl.from("#s5 .title .line", { y: 50, opacity: 0, duration: 0.45, stagger: 0.25, ease: "back.out(1.6)" }, 22.2)
+        .from("#s5 .btn", { scale: 0.6, opacity: 0, duration: 0.5, ease: "back.out(2.2)" }, 22.95)
+        .to("#s5 .btn", { scale: 1.05, duration: 0.45, yoyo: true, repeat: 3, ease: "sine.inOut" }, 23.6)
+        .from("#s5 .ital .line", { y: 30, opacity: 0, duration: 0.45, stagger: 0.15, ease: "power3.out" }, 23.5)
+        .from("#s5 .mono", { opacity: 0, duration: 0.5, ease: "power2.out" }, 24.0);
+
+      tl.fromTo("#progress", { scaleX: 0 }, { scaleX: 1, duration: 27, ease: "none" }, 0);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
