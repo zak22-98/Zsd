@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="fr" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;800;900&family=Instrument+Serif:ital@0;1&display=block"
+      rel="stylesheet"
+    />
+    <script src="assets/gsap.min.js"></script>
+    <style>
+      :root {
+        --ground: #e9e9e7;
+        --ink: #161616;
+        --muted: #6f6f6c;
+        --yellow: #f2d43b;
+        --gold: #b08a1e;
+        --cream: #fbf8f0;
+        --font-display: "Inter", sans-serif;
+        --font-serif: "Instrument Serif", "DejaVu Serif", serif;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body {
+        width: 1080px; height: 1920px; overflow: hidden;
+        background: var(--ground);
+      }
+      #root {
+        position: relative; width: 100%; height: 100%;
+        font-family: var(--font-display); color: var(--ink);
+        background: radial-gradient(120% 80% at 50% 40%, #f6f6f4 0%, var(--ground) 60%, #dcdcd9 100%);
+      }
+      .scene { position: absolute; inset: 0; }
+
+      /* ---------- Scène 1 : typo cinétique ---------- */
+      #s1 { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
+      .kin-small { font-size: 78px; font-weight: 600; letter-spacing: -0.02em; }
+      .kin-big {
+        position: relative; font-size: 230px; font-weight: 900; letter-spacing: -0.06em;
+        line-height: 0.9; font-style: italic; isolation: isolate;
+      }
+      .hl {
+        position: absolute; left: -4%; right: -4%; bottom: 8%; height: 34%;
+        background: var(--yellow); z-index: -1; transform-origin: left center;
+      }
+      .word { display: inline-block; }
+
+      /* ---------- Scène 2 : checklist verre dépoli ---------- */
+      #s2 { display: flex; align-items: center; justify-content: center; }
+      .glass {
+        width: 860px; padding: 56px 60px; border-radius: 44px;
+        background: rgba(255, 255, 255, 0.55);
+        border: 2px solid rgba(255, 255, 255, 0.9);
+        box-shadow: 0 40px 90px rgba(0, 0, 0, 0.12), inset 0 1px 0 #fff;
+      }
+      .glass-head { display: flex; align-items: center; gap: 22px; margin-bottom: 34px; }
+      .badge {
+        width: 64px; height: 64px; border-radius: 50%; background: var(--yellow);
+        display: grid; place-items: center; font-weight: 800; font-size: 28px;
+      }
+      .glass-title { font-size: 54px; font-weight: 800; letter-spacing: -0.03em; }
+      .item { display: flex; align-items: center; gap: 28px; padding: 22px 0; font-size: 50px; font-weight: 500; color: var(--muted); }
+      .item + .item { border-top: 2px solid rgba(0, 0, 0, 0.06); }
+      .check {
+        position: relative; flex: none; width: 62px; height: 62px; border-radius: 50%;
+        border: 4px solid #9a9a96;
+      }
+      .check .fill {
+        position: absolute; inset: -4px; border-radius: 50%; background: var(--ink);
+        display: grid; place-items: center; transform: scale(0);
+      }
+      .check svg { width: 34px; height: 34px; }
+
+      /* ---------- Scène 3 : les 3 outils ---------- */
+      #s3 { display: flex; align-items: center; justify-content: center; }
+      .card {
+        width: 980px; padding: 50px 50px 60px; border-radius: 40px; background: var(--cream);
+        box-shadow: 0 40px 100px rgba(0, 0, 0, 0.16);
+      }
+      .card-head {
+        display: flex; align-items: baseline; justify-content: space-between;
+        padding-bottom: 28px; border-bottom: 2px solid rgba(0, 0, 0, 0.08); margin-bottom: 46px;
+      }
+      .card-title { font-family: var(--font-serif); font-size: 96px; line-height: 1; letter-spacing: -0.01em; }
+      .card-title em { color: var(--gold); }
+      .tag { font-size: 28px; font-weight: 600; letter-spacing: 0.22em; color: var(--muted); }
+      .tools { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; text-align: center; }
+      .tool-icon {
+        width: 150px; height: 150px; margin: 0 auto 26px; border-radius: 36px;
+        display: grid; place-items: center; box-shadow: 0 14px 30px rgba(0, 0, 0, 0.12);
+      }
+      .tool-icon svg { width: 84px; height: 84px; }
+      .t1 { background: #fff; } .t2 { background: #fff; } .t3 { background: #111; }
+      .tool-name { font-size: 50px; font-weight: 800; letter-spacing: -0.03em; }
+      .tool-desc { margin-top: 8px; font-size: 28px; font-weight: 500; color: var(--muted); }
+
+      /* ---------- Scène 4 : outro ---------- */
+      #s4 { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+      .outro-small { font-size: 90px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 10px; }
+      .outro-big { position: relative; font-size: 210px; font-weight: 900; font-style: italic; letter-spacing: -0.06em; line-height: 0.9; isolation: isolate; }
+      .outro-sub { margin-top: 60px; font-size: 44px; font-weight: 500; color: var(--muted); }
+
+      /* barre de progression */
+      #progress { position: absolute; left: 0; bottom: 0; height: 12px; width: 100%; background: var(--yellow); transform-origin: left; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="16" data-width="1080" data-height="1920">
+
+      <!-- Scène 1 -->
+      <section id="s1" class="scene clip" data-start="0" data-duration="3.6" data-track-index="0">
+        <div class="kin-small"><span class="word w1">La</span> <span class="word w1">vidéo</span> <span class="word w1">a</span> <span class="word w1">été</span></div>
+        <div class="kin-small"><span class="word w2">entièrement</span> <span class="word w2">montée</span> <span class="word w2">sur</span></div>
+        <div class="kin-big"><span class="hl" id="hl1"></span><span class="word" id="claude">Claude</span></div>
+      </section>
+
+      <!-- Scène 2 -->
+      <section id="s2" class="scene clip" data-start="3.6" data-duration="4.6" data-track-index="0">
+        <div class="glass" id="glass">
+          <div class="glass-head"><div class="badge">01</div><div class="glass-title">Capture ton style</div></div>
+          <div class="item"><div class="check"><div class="fill"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div></div>Steal like an artist</div>
+          <div class="item"><div class="check"><div class="fill"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div></div>Briefe Claude</div>
+          <div class="item"><div class="check"><div class="fill"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div></div>Récupère le rendu</div>
+          <div class="item"><div class="check"><div class="fill"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div></div>Bonus : ton skill</div>
+        </div>
+      </section>
+
+      <!-- Scène 3 -->
+      <section id="s3" class="scene clip" data-start="8.2" data-duration="4.2" data-track-index="0">
+        <div class="card" id="card">
+          <div class="card-head">
+            <div class="card-title">Les <em>3</em> outils</div>
+            <div class="tag">FAIS UNE CAPTURE</div>
+          </div>
+          <div class="tools">
+            <div class="tool">
+              <div class="tool-icon t1"><svg viewBox="0 0 24 24" fill="none" stroke="#2e7d32" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4L8.1 15.9M14.5 14.5L20 20M8.1 8.1L12 12"/></svg></div>
+              <div class="tool-name">FFmpeg</div><div class="tool-desc">Coupe + mixe</div>
+            </div>
+            <div class="tool">
+              <div class="tool-icon t2"><svg viewBox="0 0 24 24" fill="none" stroke="#25a38a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="3"/><path d="M7 13h4M13 13h4M7 16h7"/></svg></div>
+              <div class="tool-name">HyperFrames</div><div class="tool-desc">Sous-titres + graphismes</div>
+            </div>
+            <div class="tool">
+              <div class="tool-icon t3"><svg viewBox="0 0 24 24" fill="none" stroke="#ff4d3d" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 20h14"/></svg></div>
+              <div class="tool-name">yt-dlp</div><div class="tool-desc">Récupère les vidéos</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Scène 4 -->
+      <section id="s4" class="scene clip" data-start="12.4" data-duration="3.6" data-track-index="0">
+        <div class="outro-small" id="o1">fais une</div>
+        <div class="outro-big"><span class="hl" id="hl2"></span><span class="word" id="o2">CAPTURE</span></div>
+        <div class="outro-sub" id="o3">et envoie-la à Claude</div>
+      </section>
+
+      <div id="progress" class="clip" data-start="0" data-duration="16" data-track-index="1"></div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      // Scène 1
+      tl.from("#s1 .w1", { y: 24, scale: 0.94, duration: 0.5, stagger: 0.08, ease: "back.out(2)" }, 0)
+        .from("#s1 .w2", { y: 60, opacity: 0, duration: 0.35, stagger: 0.14, ease: "back.out(2)" }, 0.75)
+        .from("#claude", { scale: 1.8, opacity: 0, duration: 0.45, ease: "expo.out" }, 1.35)
+        .from("#hl1", { scaleX: 0, duration: 0.4, ease: "power3.out" }, 1.6)
+        .to("#s1", { scale: 0.9, opacity: 0, filter: "blur(10px)", duration: 0.35, ease: "power2.in" }, 3.25);
+
+      // Scène 2
+      tl.from("#glass", { y: 140, opacity: 0, scale: 0.92, duration: 0.6, ease: "expo.out" }, 3.6)
+        .from("#s2 .item", { x: -50, opacity: 0, duration: 0.4, stagger: 0.12, ease: "power3.out" }, 3.85);
+      ["1", "2", "3", "4"].forEach((n, i) => {
+        const t = 4.9 + i * 0.6;
+        tl.to(`#s2 .item:nth-of-type(${i + 2}) .fill`, { scale: 1, duration: 0.3, ease: "back.out(2.5)" }, t)
+          .to(`#s2 .item:nth-of-type(${i + 2})`, { color: "#161616", duration: 0.2 }, t);
+      });
+      tl.to("#glass", { y: -120, opacity: 0, duration: 0.35, ease: "power2.in" }, 7.85);
+
+      // Scène 3
+      tl.from("#card", { scale: 0.7, rotation: -4, opacity: 0, duration: 0.6, ease: "back.out(1.6)" }, 8.2)
+        .from("#s3 .tool", { y: 80, opacity: 0, duration: 0.45, stagger: 0.2, ease: "back.out(2)" }, 8.6)
+        .from("#s3 .tag", { opacity: 0, x: 40, duration: 0.5, ease: "power2.out" }, 9.4)
+        .to("#card", { scale: 1.04, duration: 1.8, ease: "sine.inOut" }, 10.1)
+        .to("#card", { scale: 0.85, opacity: 0, duration: 0.35, ease: "power2.in" }, 12.05);
+
+      // Scène 4
+      tl.from("#o1", { y: 50, opacity: 0, duration: 0.35, ease: "back.out(2)" }, 12.45)
+        .from("#o2", { scale: 2, opacity: 0, duration: 0.45, ease: "expo.out" }, 12.7)
+        .from("#hl2", { scaleX: 0, duration: 0.4, ease: "power3.out" }, 12.95)
+        .from("#o3", { opacity: 0, y: 30, duration: 0.4, ease: "power2.out" }, 13.2);
+
+      // Progression
+      tl.fromTo("#progress", { scaleX: 0 }, { scaleX: 1, duration: 16, ease: "none" }, 0);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
