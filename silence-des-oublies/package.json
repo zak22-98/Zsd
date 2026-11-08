@@ -9,11 +9,18 @@
   },
   "private": true,
   "dependencies": {
+    "@fontsource/barlow-condensed": "^5.3.0",
+    "@fontsource/cormorant-garamond": "^5.3.0",
+    "@react-three/fiber": "^9.8.2",
     "@remotion/cli": "4.0.541",
+    "@remotion/fonts": "^4.0.541",
+    "@remotion/three": "^4.0.541",
     "@remotion/zod-types": "4.0.541",
+    "@types/three": "^0.187.0",
     "react": "19.3.1",
     "react-dom": "19.3.1",
     "remotion": "4.0.541",
+    "three": "^0.187.0",
     "zod": "4.6.7"
   },
   "devDependencies": {
